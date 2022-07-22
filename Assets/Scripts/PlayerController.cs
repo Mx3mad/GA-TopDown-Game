@@ -8,8 +8,9 @@ public class PlayerController : MonoBehaviour
 {
     Vector2 movementInput;
     Rigidbody2D rigidbodyComponent;
-    float moveSpeed = 5f;
-    public int health = 4;
+    [SerializeField] float moveSpeed = 5f;
+    [SerializeField] int health = 4;
+    float colorChangeTimer = 0.169f;
     Animator animatorController;
     GameUI gameUIScript;
     // Start is called before the first frame update
@@ -38,14 +39,23 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage()
     {
         health--;
-        Debug.Log(health);
+        //Debug.Log(health);
         gameUIScript.Damage(1);
+        if (gameObject.GetComponent<SpriteRenderer>().color == Color.white)
+            StartCoroutine(ChangePlayerColor());
         CheckDeath();
+    }
+
+    IEnumerator ChangePlayerColor()
+    {
+        gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+        yield return new WaitForSeconds(colorChangeTimer);
+        gameObject.GetComponent<SpriteRenderer>().color = Color.white;
     }
 
     private void CheckDeath()
     {
-        if(health <= 0)
+        if (health <= 0)
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
