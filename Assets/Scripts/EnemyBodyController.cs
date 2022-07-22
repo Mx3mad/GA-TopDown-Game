@@ -13,6 +13,7 @@ public class EnemyBodyController : MonoBehaviour
     [SerializeField] float moveSpeed = 4f;
 
     public Vector3 initialPos;
+    float colorChangeTimer = 0.169f;
 
     private void Start()
     {
@@ -29,6 +30,15 @@ public class EnemyBodyController : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        if (gameObject.GetComponent<SpriteRenderer>().color == Color.white)
+            StartCoroutine(ChangeEnemyColor());
+    }
+
+    IEnumerator ChangeEnemyColor()
+    {
+        gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+        yield return new WaitForSeconds(colorChangeTimer);
+        gameObject.GetComponent<SpriteRenderer>().color = Color.white;
     }
 
     public bool MoveToPlayer()
